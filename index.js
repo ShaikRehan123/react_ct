@@ -57,13 +57,13 @@ const createPage = (name) => {
   // Add Route component to add Route to last of routes
 };
 
-const sleep = (ms = 2000) => {
+const sleep = (ms = 4000) => {
   return new Promise((resolve) => setTimeout(resolve, ms));
 };
 
 async function whatDoYouWantToDo() {
   const rainbowTitle = chalkAnimation.rainbow(
-    "Welcome to React Component Creator CLI"
+    "Welcome to React Component Creator CLI. Make sure you have pages and components folder in your project's src folder"
   );
   await sleep();
   rainbowTitle.stop();
