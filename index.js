@@ -4,7 +4,10 @@ import chalk from "chalk";
 import inquirer from "inquirer";
 import chalkAnimation from "chalk-animation";
 import fs from "fs";
+import gradient from "gradient-string";
+import { createSpinner } from "nanospinner";
 
+const coolGradient = gradient("red", "green", "blue");
 const createReactComponent = (name) => {
   // create folder inside ./src/components
   fs.mkdirSync(`./src/components/${name}`);
@@ -57,16 +60,21 @@ const createPage = (name) => {
   // Add Route component to add Route to last of routes
 };
 
-const sleep = (ms = 4000) => {
+const sleep = (ms = 1000) => {
   return new Promise((resolve) => setTimeout(resolve, ms));
 };
 
 async function whatDoYouWantToDo() {
   const rainbowTitle = chalkAnimation.rainbow(
-    "Welcome to React Component Creator CLI. Make sure you have pages and components folder in your project's src folder"
+    "Welcome to React Component Creator CLI."
   );
   await sleep();
   rainbowTitle.stop();
+  const coolString = coolGradient(
+    "Make sure you have pages and components folder in your project's src folder"
+  );
+  console.log(coolString);
+  await sleep(2000);
   const answers = await inquirer.prompt([
     {
       type: "list",
@@ -114,7 +122,11 @@ async function askForFileName() {
   ]);
   const fileName = answers.fileName;
   createReactComponent(fileName);
-  console.log(chalk.green(`Component ${fileName} created successfully!`));
+  const spinner = createSpinner("Creating component...").start();
+  setTimeout(() => {
+    spinner.success();
+    console.log(chalk.green(`Component ${fileName} created successfully!`));
+  }, 1000);
 }
 
 async function askForRouteName() {
@@ -133,7 +145,11 @@ async function askForRouteName() {
   ]);
   const routeName = answers.routeName;
   createPage(routeName);
-  console.log(chalk.green(`Page ${routeName} created successfully!`));
+  const spinner = createSpinner("Creating page...").start();
+  setTimeout(() => {
+    spinner.success();
+    console.log(chalk.green(`Page ${routeName} created successfully!`));
+  }, 1000);
 }
 
 whatDoYouWantToDo();
