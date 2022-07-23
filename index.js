@@ -15,7 +15,7 @@ const createReactComponent = (name) => {
   fs.writeFileSync(
     `./src/components/${name}/index.jsx`,
     `import React from 'react';
-  import './${name}.css';
+ import './${name}.css';
     
   const ${name} = () => {
       return (
@@ -51,12 +51,13 @@ const createPage = (name) => {
   // create ${name}.css file inside ./src/pages/name
   fs.writeFileSync(`./src/pages/${name}/${name}.css`, ``);
   // Update App.js file to add route to existing routes
-  fs.appendFileSync(
-    `./src/App.js`,
-    `
-            import ${name} from './pages/${name}';
-            `
-  );
+  var data = fs.readFileSync("./src/App.js");
+  var fd = fs.openSync("./src/App.js", "a+");
+  var buffer = Buffer.from(`import ${name} from './pages/${name}';\n`);
+  fs.writeSync(fd, buffer, 0, buffer.length, 0); //write new data
+  fs.writeSync(fd, data, 0, data.length, buffer.length); //append old data
+  // or fs.appendFile(fd, data);
+  fs.close(fd);
   // Add Route component to add Route to last of routes
 };
 
@@ -74,7 +75,7 @@ async function whatDoYouWantToDo() {
     "Make sure you have pages and components folder in your project's src folder"
   );
   console.log(coolString);
-  await sleep(2000);
+  await sleep(500);
   const answers = await inquirer.prompt([
     {
       type: "list",
